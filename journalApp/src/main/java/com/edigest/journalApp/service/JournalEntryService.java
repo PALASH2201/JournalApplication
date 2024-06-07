@@ -23,6 +23,7 @@ public class JournalEntryService {
    private UserService userService;
 
 
+
     @Transactional
     public void saveEntry(JournalEntry journalEntry, String userName){
         try{
@@ -67,8 +68,7 @@ public class JournalEntryService {
                 journalEntryRepository.deleteById(objectId);
             }
         }catch(Exception e){
-            System.out.println(e);
-            throw  new RuntimeException("An error occured while deleting the entry.",e);
+            throw  new RuntimeException("An error occurred while deleting the entry.",e);
         }
         return check;
     }
