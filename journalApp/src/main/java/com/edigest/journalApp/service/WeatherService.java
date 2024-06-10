@@ -1,6 +1,7 @@
 package com.edigest.journalApp.service;
 
 import com.edigest.journalApp.api.response.WeatherResponse;
+import com.edigest.journalApp.cache.AppCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
@@ -12,17 +13,19 @@ import org.springframework.web.client.RestTemplate;
 public class WeatherService {
     @Value("${external.api.key}")
     private String apiKey;
-    private static final String API = "http://api.weatherapi.com/v1/current.json?key=API_KEY&q=CITY";
 
     @Autowired
     private RestTemplate restTemplate;
+
+    @Autowired
+    private AppCache appCache;
     public WeatherResponse getWeather(String city){
-        String finalAPI = API.replace("CITY",city).replace("API_KEY",apiKey);
+        String finalAPI = appCache.APP_CACHE.get("weather_api").replace("CITY",city).replace("API_KEY",apiKey);
         ResponseEntity<WeatherResponse> response = restTemplate.exchange(finalAPI, HttpMethod.GET, null, WeatherResponse.class);
         return response.getBody();
     }
-    public WeatherResponse postWeather(String city){
-        String finalAPI = API.replace("CITY",city).replace("API_KEY",apiKey);
+//    public WeatherResponse postWeather(String city){
+//        String finalAPI = API.replace("CITY",city).replace("API_KEY",apiKey);
 
 //        //Post-body
 //        User user = User.builder().userName("paps").password("1234").build();
@@ -34,8 +37,8 @@ public class WeatherService {
 //        HttpEntity<User> httpEntity2 = new HttpEntity<>(user,httpHeaders);
 //        ResponseEntity<WeatherResponse> response = restTemplate.exchange(finalAPI, HttpMethod.POST, httpEntity, WeatherResponse.class);
 
-        ResponseEntity<WeatherResponse> response2 = restTemplate.exchange(finalAPI, HttpMethod.GET, null, WeatherResponse.class);
-        return response2.getBody();
-    }
+//        ResponseEntity<WeatherResponse> response2 = restTemplate.exchange(finalAPI, HttpMethod.POST, null, WeatherResponse.class);
+//        return response2.getBody();
+//    }
 
 }
