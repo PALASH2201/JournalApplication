@@ -1,5 +1,7 @@
 package com.edigest.journalApp.entity;
+import com.edigest.journalApp.config.ObjectIdSerializer;
 import com.edigest.journalApp.enums.Sentiment;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.*;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
@@ -12,6 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class JournalEntry {
     @Id
+    @JsonSerialize(using = ObjectIdSerializer.class)
     private ObjectId id;
     @NonNull
     private String title;
