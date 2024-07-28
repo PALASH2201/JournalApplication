@@ -29,7 +29,7 @@ public class JournalEntryService {
             User user = userService.findByUserName(userName);
             journalEntry.setDate(LocalDateTime.now());
             JournalEntry saved = journalEntryRepository.save(journalEntry);
-            user.getJournalEntryList().add(saved);
+            user.getJournalEntryList().add(0,saved);
             userService.saveUser(user);
         }catch(Exception e){
             log.error("Exception ",e);
