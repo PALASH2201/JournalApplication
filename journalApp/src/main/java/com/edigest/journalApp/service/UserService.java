@@ -55,13 +55,6 @@ public class UserService {
         user.setRoles(Arrays.asList("USER","ADMIN"));
         userRepository.save(user);
     }
-    public boolean authenticateUser(String username , String password){
-        User user  = userRepository.findByUserName(username);
-        if(user != null && passwordEncoder.matches(password,user.getPassword())){
-            return true;
-        }
-        return false;
-    }
 }
 
 

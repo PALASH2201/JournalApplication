@@ -31,20 +31,10 @@ public class PublicController {
     public String healthCheck(){
         return "ok";
     }
-    @PostMapping("/create-user")
+    @PostMapping("/signup")
     public void signUp(@RequestBody User user){
         userService.saveNewUser(user);
     }
-
-//    @PostMapping("/login")
-//    public ResponseEntity<?> loginUser(@RequestBody User loginRequest ){
-//        boolean isAuthenticated = userService.authenticateUser(loginRequest.getUserName() , loginRequest.getPassword());
-//        if(isAuthenticated){
-//            return new ResponseEntity<>(HttpStatus.OK);
-//        }else{
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or Password");
-//        }
-//    }
 
     @PostMapping("/login")
        public ResponseEntity<?> login(@RequestBody User user){
