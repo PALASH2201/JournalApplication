@@ -28,10 +28,14 @@ public class UserController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userName =authentication.getName();
         User userInDb = userService.findByUserName(userName);
-        userInDb.setUserName(user.getUserName());
-        userInDb.setPassword(user.getPassword());
-        userService.saveNewUser(userInDb);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        if(!userInDb.getPassword().equals(user.getPassword())){
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }else{
+            userInDb.setUserName(user.getUserName());
+            userInDb.setPassword(user.getPassword());
+            userService.saveNewUser(userInDb);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        }
     }
     @DeleteMapping
     public ResponseEntity<?> deleteUserByUsername(){
@@ -46,4 +50,19 @@ public class UserController {
         return new ResponseEntity<>("Hi! "+authentication.getName()+", Current Temperature is: "+weatherService.getWeather("Mumbai").getCurrent().getTempC(),HttpStatus.OK);
     }
 
+    @PutMapping("/profile")
+    public ResponseEntity<?> addExtraUserDetails(@RequestBody User user){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userName = authentication.getName();
+        User userInDb = userService.findByUserName(userName);
+        if(user.getName() == null || user.getEmail() == null || user.getPhoneNumber() == null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }else{
+            userInDb.setName(user.getName());
+            userInDb.setEmail(user.getEmail());
+            userInDb.setPhoneNumber(user.getPhoneNumber());
+            userService.saveUser(userInDb);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        }
+    }
 }
