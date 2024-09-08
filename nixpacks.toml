@@ -8,4 +8,4 @@ working_directory = "journalApp"
 command = "java -jar journalApp/target/journalApp-0.0.1-SNAPSHOT.jar"
 
 [dependencies]
-packages = "openjsk-17"
+packages = "openjdk-17"
