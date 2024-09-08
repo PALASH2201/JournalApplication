@@ -5,7 +5,7 @@ FROM openjdk:17-jdk-slim
 WORKDIR /app
 
 # Copy the JAR file from the journalApp/target directory to the /app directory in the container
-COPY ./journalApp/target/journalApp-0.0.1-SNAPSHOT.jar /app/app.jar
+COPY journalApp/target/journalApp-0.0.1-SNAPSHOT.jar /app/app.jar
 
 # Expose the default port for Spring Boot (usually 8080)
 EXPOSE 8080
