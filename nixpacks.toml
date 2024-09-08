@@ -1,0 +1,8 @@
+[phases.setup]
+working_directory = "journalApp"
+
+[phases.build]
+working_directory = "journalApp"
+
+[phases.start]
+command = "java -jar journalApp/target/journalApp-0.0.1-SNAPSHOT.jar"
