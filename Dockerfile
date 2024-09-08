@@ -1,14 +1,12 @@
-# Use an official OpenJDK 17 image as a base image
-FROM openjdk:17-jdk-slim
-
-# Set the working directory inside the container
+# First stage: Build the JAR
+FROM maven:3.8.4-openjdk-17 AS build
 WORKDIR /app
+COPY journalApp /app
+RUN mvn clean package
 
-# Copy the JAR file from the journalApp/target directory to the /app directory in the container
-COPY journalApp/target/journalApp-0.0.1-SNAPSHOT.jar /app/app.jar
-
-# Expose the default port for Spring Boot (usually 8080)
+# Second stage: Run the application
+FROM openjdk:17-jdk-slim
+WORKDIR /app
+COPY --from=build /app/target/journalApp-0.0.1-SNAPSHOT.jar /app/app.jar
 EXPOSE 8080
-
-# Run the Spring Boot application
 CMD ["java", "-jar", "/app/app.jar"]
