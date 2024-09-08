@@ -6,3 +6,6 @@ working_directory = "journalApp"
 
 [phases.start]
 command = "java -jar journalApp/target/journalApp-0.0.1-SNAPSHOT.jar"
+
+[dependencies]
+packages = "openjsk-17"
