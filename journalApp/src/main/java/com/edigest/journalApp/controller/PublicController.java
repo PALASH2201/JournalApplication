@@ -32,8 +32,14 @@ public class PublicController {
         return "ok";
     }
     @PostMapping("/signup")
-    public void signUp(@RequestBody User user){
-        userService.saveNewUser(user);
+    public ResponseEntity<?> signUp(@RequestBody User user){
+        try {
+            userService.saveNewUser(user);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        }catch (Exception e){
+            log.error("Error",e);
+            return new ResponseEntity<>("Could not sign in!",HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping("/login")
