@@ -3,6 +3,7 @@ package com.edigest.journalApp.controller;
 import com.edigest.journalApp.entity.User;
 import com.edigest.journalApp.service.UserService;
 import com.edigest.journalApp.utils.JwtUtil;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,22 +18,20 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/public")
 @Slf4j
+@AllArgsConstructor
 public class PublicController {
 
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private JwtUtil jwtUtil;
-    @Autowired
-    private UserDetailsService userDetailsService;
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final UserService userService;
+    private final JwtUtil jwtUtil;
+    private final UserDetailsService userDetailsService;
+    private final AuthenticationManager authenticationManager;
+
     @GetMapping("/health-check")
     public String healthCheck(){
         return "ok";
     }
     @PostMapping("/signup")
-    public ResponseEntity<?> signUp(@RequestBody User user){
+    public ResponseEntity<String> signUp(@RequestBody User user){
         try {
             userService.saveNewUser(user);
             return new ResponseEntity<>(HttpStatus.CREATED);
@@ -43,7 +42,7 @@ public class PublicController {
     }
 
     @PostMapping("/login")
-       public ResponseEntity<?> login(@RequestBody User user){
+       public ResponseEntity<String> login(@RequestBody User user){
         try{
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUserName(),user.getPassword()));
             UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUserName());

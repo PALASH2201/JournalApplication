@@ -3,25 +3,26 @@ package com.edigest.journalApp.service;
 import com.edigest.journalApp.entity.JournalEntry;
 import com.edigest.journalApp.entity.User;
 import com.edigest.journalApp.repository.JournalEntryRepository;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.xhtmlrenderer.pdf.ITextRenderer;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @Slf4j
+@AllArgsConstructor
 public class JournalEntryService {
 
-@Autowired
-    private JournalEntryRepository journalEntryRepository;
-@Autowired
-   private UserService userService;
+    private final JournalEntryRepository journalEntryRepository;
+    private final UserService userService;
 
     @Transactional
     public void saveEntry(JournalEntry journalEntry, String userName){
@@ -70,6 +71,31 @@ public class JournalEntryService {
             throw  new RuntimeException("An error occurred while deleting the entry.",e);
         }
         return check;
+    }
+
+    public byte[] getPdf(String title, String content) {
+        try{
+            String htmlContent = "<html><head><meta charset='UTF-8'/></head><body>" +
+                    "<h1><center>" + title + "</center></h1>" +
+                    "<p>"+content+"</p>"+
+                    "</body></html>";
+            return generatePDFFromHTML(htmlContent);
+        }catch(Exception e){
+            e.printStackTrace();
+            return new byte[0];
+        }
+    }
+
+    private byte[] generatePDFFromHTML(String htmlContent) throws IOException, com.lowagie.text.DocumentException {
+        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+            ITextRenderer renderer = new ITextRenderer();
+            renderer.setDocumentFromString(htmlContent);
+            renderer.layout();
+            renderer.createPDF(outputStream);
+            return outputStream.toByteArray();
+        }catch(Exception e){
+            return new byte[0];
+        }
     }
 }
 
