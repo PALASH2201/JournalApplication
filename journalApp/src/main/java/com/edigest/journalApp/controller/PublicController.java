@@ -30,6 +30,7 @@ public class PublicController {
     public String healthCheck(){
         return "ok";
     }
+
     @PostMapping("/signup")
     public ResponseEntity<String> signUp(@RequestBody User user){
         try {
@@ -37,7 +38,7 @@ public class PublicController {
             return new ResponseEntity<>(HttpStatus.CREATED);
         }catch (Exception e){
             log.error("Error",e);
-            return new ResponseEntity<>("Could not sign in!",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Could not sign up!",HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -49,7 +50,7 @@ public class PublicController {
             String jwt = jwtUtil.generateToken(userDetails.getUsername());
             return new ResponseEntity<>(jwt,HttpStatus.OK);
         }catch (Exception e){
-            log.error("Error:",e);
+            log.error("Error:",e.getMessage());
             return new ResponseEntity<>("Incorrect username or password",HttpStatus.BAD_REQUEST);
         }
     }
